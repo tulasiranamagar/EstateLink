@@ -1,0 +1,38 @@
+<footer class="footer">
+  <div class="footer-container">
+    <h3>EstateLink</h3>
+    <p>
+      Embark on a journey of discovery with EstateLink's comprehensive overview. 
+      Delve into our commitment to excellence.
+    </p>
+  </div>
+
+  <div class="footer-container">
+    <h3>Useful Links</h3>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('properties_list') }}">Listing</a></li>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="footer-container">
+    <h3>Get in Touch</h3>
+    <ul>
+      <li>
+        <img src="{{ url_for('static', filename='IMAGE/location_logo.jpg') }}" alt="Location">
+        Bharatpur, Nepal
+      </li>
+      <li>
+        <img src="{{ url_for('static', filename='IMAGE/phone_logo.jpg') }}" alt="Phone">
+        +977 983456883
+      </li>
+      <li>
+        <img src="{{ url_for('static', filename='IMAGE/mail_logo.jpg') }}" alt="Email">
+        estatelink@gmail.com
+      </li>
+    </ul>
+  </div>
+</footer>

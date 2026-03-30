@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Assign Agent: {{ agent.user.name }}</h2>
+
+    <form method="POST">
+        <label for="owner_id">Assign to User:</label>
+        <select name="owner_id" id="owner_id" required>
+            <option value="">-- Select User --</option>
+            {% for user in users %}
+                <option value="{{ user.id }}"
+                    {% if agent.owner_id == user.id %} selected {% endif %}>
+                    {{ user.name }} ({{ user.email }})
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Assign</button>
+    </form>
+</div>
+{% endblock %}

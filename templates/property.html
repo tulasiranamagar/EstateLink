@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="property">
+  <div class="prop-container">
+    <img src="{{ url_for('static', filename='IMAGE/property_main_pic.jpg') }}">
+    <h2>Secure today, cherish tomorrow</h2>
+  </div>
+</section>
+
+<section class="prop-type">
+  <h2>Explore Property Types</h2>
+  <div class="prop-grid">
+    <div class="prop-box">
+      <a href="{{ url_for('search', property_type='House') }}">
+        <img src="{{ url_for('static', filename='IMAGE/prop_expo_1.jpg') }}">
+        <h3>Houses</h3>
+      </a>
+    </div>
+
+    <div class="prop-box">
+      <a href="{{ url_for('search', property_type='Apartment') }}">
+        <img src="{{ url_for('static', filename='IMAGE/prop_expo_2.jpg') }}">
+        <h3>Apartments</h3>
+      </a>
+    </div>
+
+    <div class="prop-box">
+      <a href="{{ url_for('search', property_type='Villa') }}">
+        <img src="{{ url_for('static', filename='IMAGE/prop_expo_3.jpg') }}">
+        <h3>Villa</h3>
+      </a>
+    </div>
+
+    <div class="prop-box">
+      <a href="{{ url_for('search', property_type='Land') }}">
+        <img src="{{ url_for('static', filename='IMAGE/prop_expo_4.jpg') }}">
+        <h3>Land</h3>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="featured">
+  <div class="container">
+    <h2>Featured Properties</h2>
+    <div class="properties-grid">
+      {% if not featured %}
+        <p>No featured properties at the moment.</p>
+      {% endif %}
+
+      {% for p in featured %}
+      <div class="prop-card">
+        <div class="prop-thumb">
+          {% set imgs = p.images|load_json %}
+          {% if imgs and imgs|length > 0 %}
+            <img src="{{ url_for('static', filename='uploads/' ~ imgs[0]) }}" alt="{{ p.title }}">
+          {% else %}
+            <div class="no-img">No image</div>
+          {% endif %}
+
+        </div>
+        
+        <h3><a href="{{ url_for('property_detail', prop_id=p.id) }}">{{ p.title }}</a></h3>
+        <div class="price">{{ p.price }}</div>
+        <div class="meta">{{ p.property_type }} — {{ p.sale_type }}</div>
+        <p>{{ p.location }}</p>
+        <div class="actions">
+          <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn small">View details</a>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="property-grid">
+  <div class="container">
+    <h1>All Properties</h1>
+
+    <div class="filter-buttons">
+      <a href="{{ url_for('buy_page') }}" class="btn">Buy</a>
+      <a href="{{ url_for('rent_page') }}" class="btn">Rent</a>
+      <a href="{{ url_for('properties_list') }}" class="btn">All Available</a>
+    </div>
+
+    <div class="properties-grid">
+      {% if not properties %}
+        <p>No available properties at the moment.</p>
+      {% endif %}
+
+      {% for p in properties %}
+      <div class="prop-card">
+        <div class="prop-thumb">
+          {% set imgs = p.images|load_json %}
+          {% if imgs and imgs|length > 0 %}
+            <img src="{{ url_for('static', filename='uploads/' ~ imgs[0]) }}" alt="{{ p.title }}">
+          {% else %}
+            <div class="no-img">No image</div>
+          {% endif %}
+        </div>
+        <h3><a href="{{ url_for('property_detail', prop_id=p.id) }}">{{ p.title }}</a></h3>
+        <div class="price">{{ p.price }}</div>
+        <div class="meta">{{ p.property_type }} — {{ p.sale_type }}</div>
+        <p>{{ p.location }}</p>
+        <div class="actions">
+          <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn small">View details</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

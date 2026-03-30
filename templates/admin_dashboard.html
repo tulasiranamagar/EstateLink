@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<section class="admin-panel">
+
+  <h2>Admin Dashboard</h2>
+
+ 
+  <h3>Pending Properties</h3>
+  {% if properties %}
+    <ul>
+      {% for p in properties %}
+        <li>
+          {{ p.title }} ({{ p.location }})
+          <a href="{{ url_for('admin_property_action', prop_id=p.id, action='approve') }}">Approve</a> |
+          <a href="{{ url_for('admin_property_action', prop_id=p.id, action='reject') }}">Reject</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No pending properties.</p>
+  {% endif %}
+
+
+
+  
+  <h3>Pending Testimonials</h3>
+  {% if testimonials %}
+    <ul>
+      {% for t in testimonials %}
+        <li>
+          <strong>{{ t.user.name }}</strong>: "{{ t.message }}"
+          <a class="btn-approve" href="{{ url_for('admin_testimonial_action', test_id=t.id, action='approve') }}">Approve</a> |
+          <a class="btn-reject" href="{{ url_for('admin_testimonial_action', test_id=t.id, action='reject') }}">Reject</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No pending testimonials.</p>
+  {% endif %}
+
+</section>
+
+ 
+{% if agents %}
+  {% include "admin_agents.html" %}
+{% else %}
+  <p>No pending agents.</p>
+{% endif %}
+
+
+{% endblock %}

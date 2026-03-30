@@ -1,0 +1,44 @@
+<header class="navbar">
+  <a href="{{ url_for('index') }}" class="logo">
+    <img src="{{ url_for('static', filename='IMAGE/logo.jpg') }}" alt="EstateLink Logo">
+  </a>
+
+  <nav aria-label="Main Navigation">
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('properties_list') }}">Property</a></li>
+      <li><a href="{{ url_for('buy_page') }}">Sale</a></li>
+      <li><a href="{{ url_for('rent_page') }}">Rent</a></li>
+      <li><a href="{{ url_for('sell') }}">Sell</a></li>
+
+      
+      <li class="dropdown">
+        <a href="{{ url_for('agents_page') }}">Agents</a>
+        <ul class="dropdown-menu">
+          <li><a href="{{ url_for('agents_page') }}">All Agents</a></li>
+          <li><a href="{{ url_for('apply_agent') }}">Become an Agent</a></li>
+        </ul>
+      </li>
+
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+      <li><a href="{{ url_for('about') }}">About Us</a></li>
+
+      {% if session.get('user_id') %}
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+
+      
+      {% set current_user = User.query.get(session.get('user_id')) %}
+      {% if current_user and current_user.is_admin %}
+          <li><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+          
+      {% endif %}
+        
+
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      {% else %}
+        <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+        <li><a href="{{ url_for('login') }}">Log In</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</header>

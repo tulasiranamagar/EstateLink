@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="newpass-container">
+  <h2>Set New Password</h2>
+
+  <form method="POST">
+    <input type="password" name="password" placeholder="New Password" required>
+    <input type="password" name="confirm" placeholder="Confirm Password" required>
+
+    <button type="submit">Reset Password</button>
+  </form>
+</div>
+
+{% endblock %}

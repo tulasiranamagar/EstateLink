@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="sell-intro">
+  <div class="sell-container">
+    <div class="sell-text">
+      <h1>Sell Your Property Easily</h1>
+      <p>
+        Post your property for free and connect with buyers or renters instantly.
+        Upload photos, add details, and reach thousands of people in no time.
+      </p>
+      <a href="{{ url_for('sell') }}?form=true" class="btn-start">
+        Start Selling
+      </a>
+    </div>
+    <div class="sell-image">
+      <img src="{{ url_for('static', filename='IMAGE/sell_main_pic.jpg') }}" alt="Sell your property">
+    </div>
+  </div>
+</section>
+
+
+
+{% endblock %}

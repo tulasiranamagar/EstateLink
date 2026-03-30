@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+
+<main>
+
+  <section class="intro">
+    <div class="intro-text">
+      <h1>Live Better,<br><span class="highlight">Shine Brighter.</span></h1>
+      <p>Find the house of your dreams.</p>
+      <a href="{{ url_for('buy_page') }}" class="btn booknow">Book Now</a>
+    </div>
+    <img src="{{ url_for('static', filename='IMAGE/Homepage_main_pic.jpg') }}" alt="Modern family home">
+  </section>
+
+  {% include "search.html" %}
+
+  
+  <section class="top-offers">
+    <h2>Top Offers</h2>
+    <p>Fulfill your career dreams, enjoy all the achievements of the city center and luxury housing to the fullest</p>
+    
+    
+      <div class="card-grid">
+        {% for p in top_offers %}
+          <div class="card">
+            {% set arr = p.images | load_json %}
+            {% if arr and arr|length > 0 %}
+              <img src="{{ url_for('static', filename='uploads/' ~ arr[0]) }}" alt="Property image">
+            {% else %}
+              <img src="{{ url_for('static', filename='IMAGE/forsale_pic_1.jpg') }}" alt="Default property">
+            {% endif %}
+            <h3>{{ p.title }}</h3>
+            <p><strong>R.S {{ p.price }}</strong></p>
+            <p>{{ p.location }}</p>
+            <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn">View Details</a>
+          </div>
+        {% endfor %}
+      </div>  
+
+  </section>
+
+ 
+  <section class="services">
+    <h2>Your Complete Real Estate Experience</h2>
+    <p>Unlocking opportunities, empowering choices and simplifying your real estate journey with EstateLink</p>
+    <div class="service-grid">
+      <div class="service">
+        <img src="{{ url_for('static', filename='IMAGE/service_home_logo.jpg') }}">
+        <h3>Buy a Home</h3>
+        <p>The future is waiting inside your new home. Buy home today, move right in and make your dream come true.</p>
+        <a href="{{ url_for('buy_page') }}"><button class="learnmore">Learn More</button></a>
+      </div>
+      <div class="service">
+        <img src="{{ url_for('static', filename='IMAGE/service_sell_logo.jpg') }}">
+        <h3>Sell a Home</h3>
+        <p>No matter what path you take to sell your home. We can help you navigate a successful sale.</p>
+        <a href="{{ url_for('sell') }}"><button class="learnmore">Learn More</button></a>
+      </div>
+      <div class="service">
+        <img src="{{ url_for('static', filename='IMAGE/service_rent_logo.jpg') }}">
+        <h3>Rent a Home</h3>
+        <p>We are creating a seamless experience from shopping on the largest rental network.</p>
+        <a href="{{ url_for('rent_page') }}"><button class="learnmore">Learn More</button></a>
+      </div>
+      <div class="service">
+        <img src="{{ url_for('static', filename='IMAGE/service_agents_logo.jpg') }}">
+        <h3>Find Agents</h3>
+        <p>Your next chapter starts here, connect with our trusted agents and move forward with confidence.</p>
+        <a href="{{ url_for('agents_page') }}"><button class="learnmore">Learn More</button></a>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="tes-card">
+    <h2>What Our Users Say</h2>
+    {% if testimonials %}
+      <ul>
+        {% for t in testimonials %}
+          <li>
+            <strong>{{ t.user_name }}</strong>: "{{ t.message }}"
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No testimonials yet.</p>
+    {% endif %}
+  </section>
+
+
+ 
+  <section class="reviews">
+    <div class="review-container">
+      <h1>Testimonials From Happy EstateLink Clients</h1>
+      <p>Embark on your Real Estate journey with confidence and ease. EstateLink delivers personalized solutions tailored to your unique needs.</p>
+      <a href="{{ url_for('testimonials') }}"><button class="learnmore">Learn More</button></a>
+    </div>
+  </section>
+
+</main>
+{% endblock %}

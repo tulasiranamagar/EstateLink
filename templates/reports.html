@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Download Reports</h2>
+<p>Select the type of report you want to generate:</p>
+
+<ul>
+    <li><a href="{{ url_for('reports', report_type='daily') }}">Daily Report</a></li>
+    <li><a href="{{ url_for('reports', report_type='weekly') }}">Weekly Report</a></li>
+    <li><a href="{{ url_for('reports', report_type='monthly') }}">Monthly Report</a></li>
+    <li><a href="{{ url_for('reports', report_type='yearly') }}">Yearly Report</a></li>
+</ul>
+{% endblock %}

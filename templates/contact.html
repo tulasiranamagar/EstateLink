@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="contact-section">
+
+
+  
+  <div class="contact-box">
+    <h2>Contact Us</h2>
+    <p>We’d love to hear from you.</p>
+
+    <form method="POST">
+      <input type="text" name="first_name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <input type="text" name="phone" placeholder="Your Phone">
+      <textarea name="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
+

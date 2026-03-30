@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="search-results">
+  <h2>Search Results</h2>
+
+  {% if properties %}
+    <div class="search-grid">
+      {% for p in properties %}
+        <div class="search-card">
+          {% set imgs = p.images | load_json %}
+          {% if imgs %}
+            <img src="{{ url_for('static', filename='uploads/' + imgs[0]) }}" alt="Property">
+          {% else %}
+            <img src="{{ url_for('static', filename='IMAGE/forsale_pic_1.jpg') }}" alt="Default property">
+          {% endif %}
+
+          <h3>{{ p.title }}</h3>
+          <p>R.S {{ p.price }}</p>
+          <p>{{ p.location }}</p>
+          <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn">View Details</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No properties match your search.</p>
+  {% endif %}
+</section>
+{% endblock %}

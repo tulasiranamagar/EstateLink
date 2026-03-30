@@ -1,0 +1,71 @@
+<form method="get" action="{{ url_for('search') }}" class="search-bar">
+
+  
+  <div class="search-field">
+    <label for="location">Location</label>
+    <input type="text" id="location" name="location" placeholder="Enter city or area"
+           value="{{ request.args.get('location', '') }}">
+  </div>
+
+  
+  <div class="search-field">
+    <label for="property_type">Property Type</label>
+    <select id="property_type" name="property_type">
+      <option value="">Any</option>
+      <option value="house" {% if request.args.get('property_type') == 'house' %}selected{% endif %}>House</option>
+      <option value="villa" {% if request.args.get('property_type') == 'villa' %}selected{% endif %}>Villa</option>
+      <option value="apartment" {% if request.args.get('property_type') == 'apartment' %}selected{% endif %}>Apartment</option>
+      <option value="land" {% if request.args.get('property_type') == 'land' %}selected{% endif %}>Land</option>
+    </select>
+  </div>
+
+ 
+  <div class="search-field price-range">
+    <label>Price Range</label>
+    <div class="price-inputs">
+      <input type="number" id="min_price" name="min_price" placeholder="Min"
+             value="{{ request.args.get('min_price', '') }}">
+      <span>–</span>
+      <input type="number" id="max_price" name="max_price" placeholder="Max"
+             value="{{ request.args.get('max_price', '') }}">
+    </div>
+  </div>
+
+  
+  <div class="search-btn">
+    <button type="submit" class="btn">Search</button>
+  </div>
+  
+
+</form>
+
+
+
+
+
+
+<section class="search-results">
+
+  {% if properties %}
+    <div class="card-grid">
+      {% for p in properties %}
+        <div class="card">
+          {% set imgs = p.images | load_json %}
+          {% if imgs %}
+            <img src="{{ url_for('static', filename='uploads/' + imgs[0]) }}" alt="Property">
+          {% else %}
+            <img src="{{ url_for('static', filename='IMAGE/forsale_pic_1.jpg') }}" alt="Default property">
+          {% endif %}
+
+          <h3>{{ p.title }}</h3>
+          <p>R.S {{ p.price }}</p>
+          <p>{{ p.location }}</p>
+          <p>{{ p.property_type }}</p>
+          <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn">View Details</a>
+        </div>
+      {% endfor %}
+    </div>
+ 
+  {% endif %}
+</section>
+

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="testimonial-container">
+      <h2>Leave a Testimonial</h2>
+
+      <div class="testimonial-box">
+        <textarea name="message" placeholder="Write your review..." required></textarea>
+        <input type="submit" value="Submit Review" onclick="submitTestimonial()">
+      </div>
+    </div>
+
+    <script>
+      function submitTestimonial() {
+        const textarea = document.querySelector('.testimonial-box textarea');
+        if (textarea.value.trim() === '') {
+          alert('Please enter your testimonial.');
+          return;
+        }
+
+        
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ url_for('testimonials') }}";
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'message';
+        input.value = textarea.value;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+      }
+    </script>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="property-detail">
+  <div class="container">
+
+    <div class="detail-box" style="display:flex; gap:20px; align-items:flex-start;">
+
+      <div class="detail-image" style="flex:0 0 480px;">
+        {% set imgs = property.images|load_json %}
+        {% if imgs and imgs|length > 0 %}
+          <img src="{{ url_for('static', filename='uploads/' ~ imgs[0]) }}" alt="{{ property.title }}" style="width:100%; margin-left:20px;margin-top:30px;height:450px;border-radius:8px; object-fit:cover;">
+        {% else %}
+          <div class="no-image">No image available</div>
+        {% endif %}
+      </div>
+
+      <div class="detail-info" style="flex:1;">
+        <h1>{{ property.title }}</h1>
+        <h2 class="price">{{ property.price }}</h2>
+        <p class="type">{{ property.property_type }} — {{ property.sale_type }}</p>
+        <p class="location">{{ property.location }}</p>
+
+        {% if property.description %}
+        <div class="description">
+          <h3>Property Description</h3>
+          <p>{{ property.description|safe }}</p>
+        </div>
+        {% endif %}
+
+        <div style="margin-top:12px;">
+
+          {% if property.status == "Booked" %}
+            <p style="color:red;font-weight:bold;">This property is already booked.</p>
+          {% elif property.status == "Available"%}
+            <form action="{{ url_for('book_property', property_id=property.id) }}" method="post">
+              <button type="submit" class="btn-bon">Book Now</button>
+            </form>
+          {% else %}
+            <p class="note"> You cannot book your own property.</p>
+          {% endif %}
+
+        </div>
+
+        <div class="navigation">
+          <a href="{{ url_for('buy_page') }}" class="n-btn">Back to Sale</a>
+          <a href="{{ url_for('rent_page') }}" class="n-btn">Back to Rent</a>
+          <a href="{{ url_for('properties_list') }}" class="n-btn">All Properties</a>
+        </div>
+
+        <hr style="margin-top:16px;">
+
+        <div class="owner-info" style="display:flex; gap:12px; align-items:center;">
+          <img src="{{ url_for('static', filename='uploads/' ~ (property.owner.profile_pic or 'default_profile.png')) }}" alt="owner" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">
+          <div>
+            <strong>{{ property.owner.name }}</strong><br>
+            <small>{{ property.owner.email }}</small><br>
+            {% if property.owner.phone %}<small>{{ property.owner.phone }}</small>{% endif %}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

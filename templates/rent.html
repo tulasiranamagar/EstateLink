@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <section class="rent">
+    <div class="rent-pic">
+      <img src="{{ url_for('static', filename='IMAGE/rent_main_pic.jpg') }}">
+      <h2>Find comfort, without the commitment.</h2>
+    </div>      
+  </section>
+
+<section class="rent-grid">
+  <h2>For Rent</h2>
+    <div class="card-grid">
+      {% for p in properties %}
+        <div class="card">
+          {% set imgs = p.images | load_json %}
+          {% if imgs and imgs|length > 0 %}
+            <img src="{{ url_for('static', filename='uploads/' ~ imgs[0]) }}" alt="Property image">
+          {% else %}
+            <img src="{{ url_for('static', filename='IMAGE/forsale_pic_1.jpg') }}" alt="Default image">
+          {% endif %}
+
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.location }}</p>
+          <p><strong>Rs {{ p.price }} / month</strong></p>
+          <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn">View Details</a>
+        </div>
+      {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

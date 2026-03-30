@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="agents">
+  <h2>Our Agents</h2>
+  <p>Meet our trusted real estate professionals.</p>
+
+  <div class="agent-grid">
+    {% for agent in agents %}
+    <div class="agent">
+
+      <img src="{{ url_for('static', filename='uploads/' ~ agent.user.profile_pic) }}"
+        alt="Agent" class="profile-pic">
+     
+
+      <h3>{{ agent.user.name }}</h3>
+      <p>{{ agent.user.email }}</p>
+      <p>{{ agent.user.phone }}</p>
+      <p><strong>Independent Agent</strong></p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

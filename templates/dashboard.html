@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <div class="dashcontainer">
+      
+
+      <div class="dashboard-profile-box">
+        <div class="dashboard-profile-header">
+          <img src="{{ url_for('static', filename='uploads/' ~ user.profile_pic) }}"
+              alt="Profile Picture"
+              class="dashboard-profile-pic">
+          <div class="dashboard-profile-info">
+            <h3 class="dashboard-profile-name">{{ session.user_name if session.user_name else 'User' }}</h3>
+            <p class="dashboard-profile-email">{{ user.email }}</p>
+          </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('upload_profile_pic') }}" enctype="multipart/form-data" class="profile-upload-box">
+          <label for="profile_pic" class="upload-label">Update Profile Picture</label>
+          <div class="upload-row">
+            <input type="file" name="profile_pic" id="profile_pic" accept="image/*" required class="upload-input">
+            <button type="submit" class="upload-btn">Upload</button>
+          </div>
+        </form>
+
+
+        <div class="dashboard-profile-actions">
+          <a href="{{ url_for('testimonials') }}" class="dashboard-profile-link">Leave a Testimonial</a>
+        </div>
+      </div>
+    </div>
+
+  <div style="margin-top:28px;">
+    
+
+
+    <div class="dashboard-controls" style="display:flex; gap:12px; margin:16px 0; flex-wrap:wrap;">
+      <a href="{{ url_for('dashboard', status='all') }}" class="btn {% if selected_status=='all' %}active{% endif %}">
+        All ({{ counts.all }})
+      </a>
+      <a href="{{ url_for('dashboard', status='available') }}" class="btn {% if selected_status=='available' %}active{% endif %}">
+        Available ({{ counts.available }})
+      </a>
+      <a href="{{ url_for('dashboard', status='sold') }}" class="btn {% if selected_status=='sold' %}active{% endif %}">
+        Sold ({{ counts.sold }})
+      </a>
+      <a href="{{ url_for('dashboard', status='pending') }}" class="btn {% if selected_status=='pending' %}active{% endif %}">
+        Pending ({{ counts.pending }})
+      </a>
+
+      <div style="margin-left: auto; display:flex; gap:8px; align-items:center;">
+        <a href="{{ url_for('sell') }}" class="btn">Add Property</a>
+        <a href="{{ url_for('logout') }}" class="btn">Logout</a>
+      </div>
+    </div>
+
+
+    <div style="display:flex; justify-content:space-between; align-items:center;margin-bottom:30px; margin-top:60px;">
+      <h2>Your Properties</h2>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; margin-top:12px;">
+      {% if not properties %}
+        <p>No properties found for this filter.</p>
+      {% endif %}
+
+      {% for p in properties %}
+      <div class="prop-card" style="border:1px solid #ddd; padding:12px; border-radius:8px; position:relative;">
+        <div class="prop-thumb" style="height:160px; display:flex; align-items:center; justify-content:center; background:#f7f7f7; margin-bottom:8px;">
+          {% set imgs = p.images|load_json %}
+          {% if imgs and imgs|length > 0 %}
+            <img src="{{ url_for('static', filename='uploads/' ~ imgs[0]) }}" alt="{{ p.title }}" style="max-height:150px; max-width:100%; object-fit:cover;">
+          {% else %}
+            <div style="font-size:12px;color:#666;">No image</div>
+          {% endif %}
+        </div>
+
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+          <h3 style="margin:0; flex:1;">{{ p.title }}</h3>
+          {% if not p.approved %}
+            <span style="padding:4px 8px; border-radius:6px; background:#fff3cd; color:#856404; font-weight:600; font-size:12px;">PENDING</span>
+          {% elif  p.status == 'Sold' %}
+            <span style="padding:4px 8px; border-radius:6px; background:#ffe6e6; color:#a33; font-weight:600; font-size:12px;">SOLD</span>
+          {% else %}
+            <span style="padding:4px 8px; border-radius:6px; background:#e6ffea; color:#137a2b; font-weight:600; font-size:12px;">Available</span>
+          {% endif %}
+        </div>
+
+        <div style="margin-top:8px; display:flex; gap:8px; align-items:center;">
+        <a href="{{ url_for('property_detail', prop_id=p.id) }}" class="btn small">View</a>
+
+     
+
+
+
+         {% if p.approved %}
+            {% if p.status == 'Booked' %}
+              <span style="font-size:12px; color:#555;">Booked — actions locked</span>
+            {% else %}
+              <a href="{{ url_for('edit_property', prop_id=p.id) }}" class="btn small">Edit</a>
+
+             
+
+
+
+          <form action="{{ url_for('toggle_property_status', prop_id=p.id) }}" method="post" style="margin-left:auto;">
+            {% if p.status == 'Sold' %}
+              <button type="submit" class="btn small">Mark Available</button>
+            {% else %}
+              <button type="submit" class="btn small">Mark Sold</button>
+            {% endif %}
+                </form>
+              {% endif %}
+            {% else %}
+              <span style="font-size:12px; color:#777;">Awaiting approval — actions locked</span>
+            {% endif %}
+          </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+<section class="booking-sections">
+
+
+      <section class="my-bookings">
+        <h2>My Bookings</h2>
+        {% if user.bookings %}
+          <div class="bookings-container">
+            {% for booking in user.bookings %}
+              <div class="bookings-cards">
+                <div class="booking-left">
+                  {% set imgs = booking.property.images|load_json %}
+                  {% if imgs and imgs[0] %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ imgs[0]) }}" class="property-pic">
+                  {% endif %}
+
+                  <div class="booking-info">
+                    <div class="booking-header">
+                      <strong>{{ booking.property.title }}</strong>
+                      <small>{{ booking.created_at.strftime('%Y-%m-%d') if booking.created_at }}</small>
+                    </div>
+
+                    <div class="booking-details">
+                      Status: 
+                      <span class="status-badge {{ booking.status|lower }}">
+                        {{ booking.status }}
+                      </span>
+                    </div>
+
+                    <a href="{{ url_for('booking_detail', booking_id=booking.id) }}" class="view-btn">
+                      View Booking Status
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p>You haven’t booked any properties yet.</p>
+        {% endif %}
+      </section>
+
+      <section class="buyers-list">
+        <h2>Client Reservations</h2>
+
+        {% if owner_bookings %}
+          <div class="buyers-list-container">
+            {% for booking in owner_bookings %}
+              <div class="buyer-card">
+                
+                <div class="buyer-left">
+                  <img src="{{ url_for('static', filename='uploads/' ~ (booking.buyer.profile_pic or 'default_profile.png')) }}"
+                      alt="Buyer Picture" class="buyer-pic">
+
+                  <div class="buyer-info">
+                    <div class="buyer-header">
+                      <strong>{{ booking.buyer.name }}</strong>
+                      <small>• booked <em>{{ booking.property.title }}</em></small>
+                      {% if booking.created_at %}
+                        <small class="date">{{ booking.created_at.strftime('%Y-%m-%d') }}</small>
+                      {% endif %}
+                    </div>
+
+                    <div class="buyer-details">
+                      <div>Email: {{ booking.buyer.email }}</div>
+                      {% if booking.buyer.phone %}
+                        <div>Phone: {{ booking.buyer.phone }}</div>
+                      {% endif %}
+                      <div><strong>Status:</strong> {{ booking.status }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="buyer-right">
+                  <div class="property-status">
+                    {% if not booking.property.approved %}
+                      <span class="status-badge pending">PENDING</span>
+                    {% elif booking.property.status == 'Sold' %}
+                      <span class="status-badge sold">SOLD</span>
+                    {% elif booking.property.status == 'Booked' %}
+                      <span class="status-badge booked">BOOKED</span>
+                    {% else %}
+                      <span class="status-badge available">AVAILABLE</span>
+                    {% endif %}
+                  </div>
+
+                  <div class="buyer-actions">
+                    {% if booking.status == "Pending" %}
+                      <form action="{{ url_for('confirm_booking', booking_id=booking.id) }}" method="post">
+                        <button type="submit" class="action-btn approve">Approve</button>
+                      </form>
+                      <form action="{{ url_for('owner_cancel_booking', booking_id=booking.id) }}" method="post">
+                        <button type="submit" class="action-btn reject">Reject</button>
+                      </form>
+                    {% elif booking.status == "Confirmed" %}
+                      <form action="{{ url_for('owner_cancel_booking', booking_id=booking.id) }}" method="post">
+                        <button type="submit" class="action-btn cancel">Cancel</button>
+                      </form>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p>No one has booked your properties yet.</p>
+        {% endif %}
+      </section>
+    </section>
+{% endblock %}

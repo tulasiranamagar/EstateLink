@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="admin-agents">
+  <h2>Manage Agent Applications</h2>
+
+  <table border="1" cellpadding="10">
+    <thead>
+      <tr>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for agent in agents %}
+      <tr>
+        <td>{{ agent.user.name }}</td>
+        <td>{{ agent.user.email }}</td>
+        <td>
+          {% if agent.verified %}
+            Approved
+          {% else %}
+             Pending
+          {% endif %}
+        </td>
+        <td>
+          {% if not agent.verified %}
+            <a href="{{ url_for('admin_agent_action', agent_id=agent.id, action='approve') }}">Approve</a>
+            <a href="{{ url_for('admin_agent_action', agent_id=agent.id, action='reject') }}">Reject</a>
+          {% else %}
+            <a href="{{ url_for('admin_agent_action', agent_id=agent.id, action='reject') }}">Remove</a>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

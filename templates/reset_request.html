@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="reset-container">
+  <h2>Reset Password</h2>
+
+  <form method="POST">
+    <input type="email" name="email" placeholder="Enter your email" required>
+    <button type="submit">Send Reset Link</button>
+  </form>
+
+  <p class="note">
+    The reset link will be printed in your <strong>console/terminal</strong>.  
+    Copy it into your browser to continue resetting your password.
+  </p>
+</div>
+
+{% endblock %}

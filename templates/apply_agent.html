@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<section class="apply-agent">
+  <h2>Apply to Become an Agent</h2>
+  <p>Please provide your license details and experience. Applications must be approved by the site admin.</p>
+
+  <form method="POST" class="form" action="{{ url_for('apply_agent') }}">
+    <div class="form-group">
+      <label for="license_no">License Number</label>
+      <input type="text" id="license_no" name="license_no"
+             placeholder="Enter your license number"
+             value="{{ request.form.license_no or '' }}" required>
+
+      {% if error %}
+        <p style="color:red; font-size:14px; margin-top:4px;">{{ error }}</p>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label for="experience">Years of Experience</label>
+      <input type="number" id="experience" name="experience"
+             placeholder="e.g. 5" min="0"
+             value="{{ request.form.experience or '' }}">
+    </div>
+
+    <button type="submit" class="btn">Submit Application</button>
+  </form>
+</section>
+{% endblock %}
